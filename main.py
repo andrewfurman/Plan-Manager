@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from parsing import parse_plan_data  # Import the parsing function
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -29,11 +30,18 @@ def index():
 def add_plan_form():
     return render_template('add_plan.html')
 
-# Route to handle form submission and add a plan
 @app.route('/add_plan', methods=['POST'])
 def add_plan():
     link = request.form.get('link_to_plan_document')
-    new_plan = PlanDocument(link_to_plan_document=link)
+    raw_data = request.form.get('link_to_plan_document')
+
+    # Use the updated parsing function
+    parsed_data = parse_plan_data(raw_data)
+
+    new_plan = PlanDocument(
+        link_to_plan_document=link,
+        plan_document_text=parsed_data
+    )
     db.session.add(new_plan)
     db.session.commit()
     return redirect(url_for('index'))
