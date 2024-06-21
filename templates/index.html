@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='/styles.css') }}">
+</head>
+<body>
+    <!-- Include the header -->
+    {% include 'header.html' %}
+
+    <h2>Available Plans</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Link to Plan Document</th>
+                <th>Plan Document Text</th>
+                <th>LOB</th>
+                <th>HMO/PPO</th>
+                <th>Effective Date</th>
+                <th>Cost Share Overview</th>
+                <th>Geography</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for plan in plans %}
+            <tr>
+                <td>{{ plan.id }}</td>
+                <td>
+                    {% if plan.link_to_plan_document %}
+                        <a href="{{ plan.link_to_plan_document }}" target="_blank">{{ plan.link_to_plan_document }}</a>
+                    {% endif %}
+                </td>
+                <td>{{ plan.plan_document_text }}</td>
+                <td>{{ plan.lob }}</td>
+                <td>{{ plan.hmo_ppo }}</td>
+                <td>{{ plan.effective_date }}</td>
+                <td>{{ plan.cost_share_overview }}</td>
+                <td>{{ plan.geography }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

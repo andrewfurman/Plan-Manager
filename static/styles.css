@@ -1,0 +1,46 @@
+header {
+    background-color: #d3d3d3; /* Light grey background */
+    width: 100%;              /* Full width */
+    box-sizing: border-box;   /* Ensure padding doesn't affect total width */
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Space out items evenly */
+    max-width: 1200px;              /* Optional: max width to center content */
+    margin: 0 auto;                 /* Center the nav within the header */
+}
+
+.logo-title-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.logo-link {
+    display: inline-block;
+}
+
+.header-logo {
+    max-width: 75px;  /* 25% smaller than 100px */
+    max-height: 75px; /* Maintain aspect ratio */
+    padding: 10px;    /* Add 10 pixel padding around the logo */
+    margin-right: 10px; /* Adjust space between the logo and title as needed */
+}
+
+.header-title {
+    font-size: 24px; /* Adjust the font size as needed */
+    font-weight: bold;
+}
+
+nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+nav li {
+    margin-right: 20px;
+}

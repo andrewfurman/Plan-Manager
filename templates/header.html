@@ -1,0 +1,15 @@
+<header>
+    <nav>
+        <div class="logo-title-wrapper">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='Michigan_Logo.jpg') }}" alt="Logo" class="header-logo">
+            </a>
+            <span class="header-title">BCBSM Plan Manager</span>
+        </div>
+        <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="{{ url_for('add_plan_form') }}">Add Plan</a></li>
+            <!-- Add more navigation links as needed -->
+        </ul>
+    </nav>
+</header>
