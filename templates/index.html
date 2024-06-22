@@ -27,13 +27,15 @@
         <tbody>
         {% for plan in plans %}
             <tr>
-                <td>{{ plan.id }}</td>
+                <td>
+                    <a href="{{ url_for('view_plan', plan_id=plan.id) }}">{{ plan.id }}</a>
+                </td>
                 <td>
                     {% if plan.link_to_plan_document %}
                         <a href="{{ plan.link_to_plan_document }}" target="_blank">{{ plan.link_to_plan_document }}</a>
                     {% endif %}
                 </td>
-                <td>{{ plan.plan_document_text }}</td>
+                <td>{{ plan.plan_document_text | truncate_lines }}</td>
                 <td>{{ plan.lob }}</td>
                 <td>{{ plan.hmo_ppo }}</td>
                 <td>{{ plan.effective_date }}</td>

@@ -51,3 +51,24 @@ if __name__ == '__main__':
     # Initialize the database and create the table
     with app.app_context():
         db.create_all()
+
+@app.template_filter('truncate_lines')
+def truncate_lines(text, max_lines=4, max_length=200):
+    if not text:
+        return ''
+
+    lines = text.split('\n')[:max_lines]
+    truncated_lines = []
+
+    for line in lines:
+        truncated_line = (line[:max_length] + '...') if len(line) > max_length else line
+        truncated_lines.append(truncated_line)
+
+    return '\n'.join(truncated_lines)
+# Register the custom filter with the Jinja environment
+app.jinja_env.filters['truncate_lines'] = truncate_lines
+
+@app.route('/view_plan/<int:plan_id>')
+def view_plan(plan_id):
+    plan = PlanDocument.query.get_or_404(plan_id)
+    return render_template('view_plan.html', plan=plan)
