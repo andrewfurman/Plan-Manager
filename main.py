@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from parsing import parse_plan_data  # Import the parsing function
+import requests
+from flask import jsonify
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -72,3 +74,39 @@ app.jinja_env.filters['truncate_lines'] = truncate_lines
 def view_plan(plan_id):
     plan = PlanDocument.query.get_or_404(plan_id)
     return render_template('view_plan.html', plan=plan)
+
+@app.route('/update_plan/<int:plan_id>', methods=['POST'])
+def update_plan(plan_id):
+    plan = PlanDocument.query.get_or_404(plan_id)
+
+    if not plan.plan_document_text:
+        return jsonify({"error": "Plan document text is empty"}), 400
+
+    api_url = 'https://extract-plan-info.replit.app/extract-plan-details'
+    headers = {'Content-Type': 'application/json'}
+    payload = {'text': plan.plan_document_text}
+
+    response = requests.post(api_url, headers=headers, json=payload)
+
+    if response.status_code == 200:
+        data = response.json()
+        
+        plan.lob = data.get('LOB')
+        plan.hmo_ppo = data.get('HMO/PPO')
+        
+        effective_date_str = data.get('Effective Date')
+        if effective_date_str:
+            try:
+                plan.effective_date = datetime.strptime(effective_date_str.split(' - ')[0], '%m/%d/%Y').date()  # Only use the start date
+            except ValueError as e:
+                return jsonify({"error": f"Error parsing Effective Date: {str(e)}"}), 400
+        else:
+            plan.effective_date = None  # or some default/fallback value if desired
+
+        plan.cost_share_overview = data.get('Cost Share Overview')
+        plan.geography = data.get('Geography')
+
+        db.session.commit()
+        return jsonify({"message": "Plan updated successfully"})
+    else:
+        return jsonify({"error": "Failed to extract plan details"}), 500

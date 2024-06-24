@@ -21,6 +21,7 @@
             <td>
                 {% if plan.link_to_plan_document %}
                     <a href="{{ plan.link_to_plan_document }}" target="_blank">{{ plan.link_to_plan_document }}</a>
+                    <button id="updatePlanButton">Update Plan Data</button>
                 {% endif %}
             </td>
         </tr>
@@ -48,5 +49,30 @@
 
     <h3>Full Plan Document Text</h3>
     <pre>{{ plan.plan_document_text }}</pre>
+
+    <script>
+        document.getElementById('updatePlanButton').addEventListener('click', function() {
+            const planId = {{ plan.id }};
+            fetch(`/update_plan/${planId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message) {
+                    alert(data.message);
+                    window.location.reload();
+                } else {
+                    alert(data.error || 'An error occurred while updating the plan');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to update plan data. Please try again later.');
+            });
+        });
+    </script>
 </body>
 </html>
