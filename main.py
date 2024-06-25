@@ -54,29 +54,40 @@ def view_plan(plan_id):
 @app.route('/update_plan/<int:plan_id>', methods=['POST'])
 def update_plan(plan_id):
     plan = PlanDocument.query.get_or_404(plan_id)
-
     if not plan.plan_document_text:
         return jsonify({"error": "Plan document text is empty"}), 400
 
+    print(f"Updating plan with id: {plan_id}")
     extracted_data = extract_plan_info(plan.plan_document_text)
+    print(f"Extracted data: {extracted_data}")
 
-    plan.lob = extracted_data.get('LOB')
-    plan.hmo_ppo = extracted_data.get('HMO/PPO')
-    effective_date_str = extracted_data.get('Effective Date')
+    if 'error' in extracted_data:
+        return jsonify({"error": f"Error during extraction: {extracted_data['error']}"}), 400
 
-    if effective_date_str:
-        try:
-            plan.effective_date = datetime.strptime(effective_date_str.split(' - ')[0], '%m/%d/%Y').date()
-        except ValueError as e:
-            return jsonify({"error": f"Error parsing Effective Date: {str(e)}"}), 400
-    else:
-        plan.effective_date = None  # or some default/fallback value if desired
+    try:
+        plan.lob = extracted_data.get('LOB', plan.lob)
+        plan.hmo_ppo = extracted_data.get('HMO/PPO', plan.hmo_ppo)
+        effective_date_str = extracted_data.get('Effective Date', None)
 
-    plan.cost_share_overview = extracted_data.get('Cost Share Overview')
-    plan.geography = extracted_data.get('Geography')
+        if effective_date_str:
+            try:
+                plan.effective_date = datetime.strptime(effective_date_str.split(' - ')[0], '%m/%d/%Y').date()
+            except ValueError as e:
+                print(f"Error parsing Effective Date: {str(e)}")
+                return jsonify({"error": f"Error parsing Effective Date: {str(e)}"}), 400
+        else:
+            plan.effective_date = None  # or some default/fallback value if desired
 
-    db.session.commit()
-    return jsonify({"message": "Plan updated successfully"})
+        plan.cost_share_overview = extracted_data.get('Cost Share Overview', plan.cost_share_overview)
+        plan.geography = extracted_data.get('Geography', plan.geography)
+
+        db.session.commit()
+        print(f"Plan with id {plan_id} updated successfully.")
+        return jsonify({"message": "Plan updated successfully"})
+
+    except Exception as e:
+        print(f"Error updating plan with id {plan_id}: {str(e)}")
+        return jsonify({"error": f"Error updating plan: {str(e)}"}), 500
 
 @app.template_filter('truncate_lines')
 def truncate_lines(text, max_lines=4, max_length=200):
