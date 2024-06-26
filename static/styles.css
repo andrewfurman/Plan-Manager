@@ -1,20 +1,26 @@
+/* Global Styles */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Ensure header background spans full width */
 header {
-    background-color: #d3d3d3; /* Light grey background */
-    width: 100%;              /* Full width */
-    box-sizing: border-box;   /* Ensure padding doesn't affect total width */
+    background-color: #d3d3d3;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between; /* Space out items evenly */
-    max-width: 1200px;              /* Optional: max width to center content */
-    margin: 0 auto;                 /* Center the nav within the header */
+/* Container ensures content is aligned */
+.container {
+    max-width: 1200px; /* Keep max-width for alignment consistency */
+    margin: 0 auto;
 }
 
-.logo-title-wrapper {
+/* Specific styles for header content */
+.header-content {
     display: flex;
     align-items: center;
+    margin-left: 20px; /* Add margin to align with the page content */
 }
 
 .logo-link {
@@ -22,25 +28,114 @@ nav {
 }
 
 .header-logo {
-    max-width: 75px;  /* 25% smaller than 100px */
-    max-height: 75px; /* Maintain aspect ratio */
-    padding: 10px;    /* Add 10 pixel padding around the logo */
-    margin-right: 10px; /* Adjust space between the logo and title as needed */
+    max-width: 75px;
+    max-height: 75px;
+    padding: 10px;
+    margin-right: 10px;
 }
 
 .header-title {
-    font-size: 24px; /* Adjust the font size as needed */
+    font-size: 24px;
     font-weight: bold;
 }
 
-nav ul {
-    list-style: none;
+/* Header Row */
+.header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 80%;
+    margin: 20px auto;
+}
+
+.header-row h2 {
     margin: 0;
-    padding: 0;
+}
+
+.header-row form {
     display: flex;
     align-items: center;
 }
 
-nav li {
-    margin-right: 20px;
+.header-row form input[type="text"] {
+    margin-right: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.header-row form input[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.header-row form input[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+/* Table Styles */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+
+/* Button Formatting */
+.add_plan {
+    background-color: #388E3C;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.add_plan:hover {
+    background-color: #2E7D32;
+}
+
+.regenerate {
+    background-color: #4169E1;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.regenerate:hover {
+    background-color: #3A5FCD;
+}
+
+.delete {
+    background-color: #FF6F61;
+    color: white;
+    font-weight: bold;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.delete:hover {
+    background-color: #FF5C4D;
 }

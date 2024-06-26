@@ -4,43 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='scripts.js') }}" defer></script>
 </head>
 <body>
     <!-- Include the header -->
     {% include 'header.html' %}
 
-    <h2>Available Plans</h2>
+    <div class="header-row">
+        <h2>Available Plans</h2>
+        <form action="{{ url_for('add_plan') }}" method="POST">
+            <input type="text" id="link_to_plan_document" name="link_to_plan_document" placeholder="Add plan document link" required>
+            <input type="submit" value="➕ Add Plan" class="add_plan">
+        </form>
+    </div>
+
     <table border="1">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>Link to Plan Document</th>
-                <th>Plan Document Text</th>
+                <th>Name of Plan</th>
                 <th>LOB</th>
-                <th>HMO/PPO</th>
                 <th>Effective Date</th>
-                <th>Cost Share Overview</th>
-                <th>Geography</th>
+                <th>Type of Plan</th>
+                <th>Regenerate</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
         {% for plan in plans %}
             <tr>
                 <td>
-                    <a href="{{ url_for('view_plan', plan_id=plan.id) }}">{{ plan.id }}</a>
+                    <a href="{{ url_for('view_plan', plan_id=plan.id) }}">{{ plan.name_of_plan }}</a>
+                </td>
+                <td>{{ plan.lob }}</td>
+                <td>{{ plan.effective_date }}</td>
+                <td>{{ plan.hmo_ppo }}</td>
+                <td>
+                    <button onclick="updatePlan({{ plan.id }})" class="regenerate">🔄 Regenerate</button>
                 </td>
                 <td>
-                    {% if plan.link_to_plan_document %}
-                        <a href="{{ plan.link_to_plan_document }}" target="_blank">{{ plan.link_to_plan_document }}</a>
-                    {% endif %}
+                    <button onclick="deletePlan({{ plan.id }})" class="delete">🗑️ Delete</button>
                 </td>
-                <td>{{ plan.plan_document_text | truncate_lines }}</td>
-                <td>{{ plan.lob }}</td>
-                <td>{{ plan.hmo_ppo }}</td>
-                <td>{{ plan.effective_date }}</td>
-                <td>{{ plan.cost_share_overview }}</td>
-                <td>{{ plan.geography }}</td>
             </tr>
         {% endfor %}
         </tbody>

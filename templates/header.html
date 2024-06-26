@@ -1,14 +1,10 @@
 <header>
-    <nav>
-        <div class="logo-title-wrapper">
+    <div class="container">
+        <div class="header-content">
             <a href="/" class="logo-link">
                 <img src="{{ url_for('static', filename='Logo.jpg') }}" alt="Logo" class="header-logo">
             </a>
-            <span class="header-title">Michigan Plan Manager</span>
+            <span class="header-title">Plan Manager</span>
         </div>
-        <ul>
-            <li><a href="{{ url_for('add_plan_form') }}">Add Plan</a></li>
-            <!-- Add more navigation links as needed -->
-        </ul>
-    </nav>
+    </div>
 </header>
